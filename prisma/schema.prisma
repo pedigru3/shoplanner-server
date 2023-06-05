@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String @id @default(uuid())
+  login      String @unique
+  providerId Int    @unique
+  name       String
+  avatarUrl  String
+
+  shoppingLists ShoppingList[]
+  Item          Item[]
+}
+
+model ShoppingList {
+  id     String @id @default(uuid())
+  userId String
+
+  name      String
+  createdAt DateTime @default(now())
+
+  users            User               @relation(fields: [userId], references: [id])
+  ShoppingListItem ShoppingListItem[]
+}
+
+model ShoppingListItem {
+  id             String @id @default(uuid())
+  shoppingListId String
+  itemId         String
+  priceId        String
+
+  quantity  Decimal
+  createdAt DateTime @default(now())
+
+  item         Item         @relation(fields: [itemId], references: [id])
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id])
+  currentPrice Price        @relation(fields: [priceId], references: [id])
+}
+
+model Item {
+  id     String @id @default(uuid())
+  userId String
+
+  name      String
+  category  String
+  createdAt DateTime @default(now())
+
+  shoppingListItems ShoppingListItem[]
+  prices            Price[]
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Price {
+  id     String @id @default(uuid())
+  itemId String
+
+  value     Decimal
+  createdAt DateTime @default(now())
+
+  item             Item               @relation(fields: [itemId], references: [id])
+  ShoppingListItem ShoppingListItem[]
+}
