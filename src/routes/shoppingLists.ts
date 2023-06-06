@@ -20,6 +20,9 @@ export async function shoppingListsRoutes(app: FastifyInstance) {
         name: true,
         createdAt: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
     return result
