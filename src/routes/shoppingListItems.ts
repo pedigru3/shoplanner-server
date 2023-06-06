@@ -175,15 +175,43 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
 
   app.delete('/shopping-list-item/:id', async (req, reply) => {
     try {
+      const userId = req.user.sub
+
       const paramScheme = z.object({
         id: z.string().uuid(),
       })
       const { id } = paramScheme.parse(req.params)
-      await prisma.shoppingListItem.delete({
+
+      const shoppingListItem = await prisma.shoppingListItem.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        include: {
+          item: {
+            select: {
+              userId: true,
+            },
+          },
+        },
+      })
+
+      if (shoppingListItem.item.userId !== userId) {
+        reply.status(401).send({ error: 'Unauthorized' })
+      }
+
+      const deletedItem = prisma.shoppingListItem.delete({
         where: {
           id,
         },
       })
+
+      const deletedPrice = prisma.price.delete({
+        where: {
+          id: shoppingListItem.priceId,
+        },
+      })
+
+      await prisma.$transaction([deletedItem, deletedPrice])
     } catch (error) {
       return reply.status(400).send({ error })
     }
