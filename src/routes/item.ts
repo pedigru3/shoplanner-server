@@ -7,7 +7,7 @@ export async function itemRoutes(app: FastifyInstance) {
     await request.jwtVerify()
   })
 
-  app.get('item/:name', async (req, reply) => {
+  app.get('/item/:name', async (req, reply) => {
     try {
       const userId = req.user.sub
 
