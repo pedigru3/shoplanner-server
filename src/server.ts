@@ -5,6 +5,7 @@ import { authRoutes } from './routes/auth'
 import cors from '@fastify/cors'
 import 'dotenv/config'
 import jwt from '@fastify/jwt'
+import { itemRoutes } from './routes/item'
 
 const app = fastify()
 
@@ -17,6 +18,7 @@ app.register(jwt, {
 })
 
 app.register(authRoutes)
+app.register(itemRoutes)
 app.register(shoppingListsRoutes)
 app.register(shoppingListsItemsRoutes)
 
