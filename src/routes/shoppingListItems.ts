@@ -163,7 +163,6 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
           data: {
             quantity,
           },
-          select,
         })
         return response
       }
