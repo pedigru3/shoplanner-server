@@ -14,7 +14,7 @@ app.register(cors, {
 })
 
 app.register(jwt, {
-  secret: 'csl_@!amHqjdfjvlxFKSLajiwqquauajz@3019',
+  secret: process.env.JWT_PASS ?? 'default@dpldz.cakpregister',
 })
 
 app.register(authRoutes)
@@ -24,7 +24,7 @@ app.register(shoppingListsItemsRoutes)
 
 app
   .listen({
-    host: '0.0.0.0',
+    host: process.env.PORT ? '0.0.0.0' : 'localhost',
     port: process.env.PORT ? Number(process.env.PORT) : 3333,
   })
   .then(() => {

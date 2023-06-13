@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import axios from 'axios'
 import { prisma } from '../lib/prisma'
+import { verifyGoogle } from '../lib/googleOauth'
 
 export async function authRoutes(app: FastifyInstance) {
   app.post('/register', async (req, reply) => {
@@ -40,7 +41,7 @@ export async function authRoutes(app: FastifyInstance) {
       })
 
       const userSchema = z.object({
-        id: z.number(),
+        id: z.number().transform((value) => value.toString()),
         login: z.string(),
         name: z.string(),
         avatar_url: z.string().url(),
@@ -87,5 +88,58 @@ export async function authRoutes(app: FastifyInstance) {
     } catch (error) {
       return reply.status(500).send(error)
     }
+  })
+
+  app.post('/register/google', async (req) => {
+    const bodySchema = z.object({
+      idToken: z.string(),
+    })
+    const body = bodySchema.parse(req.body)
+
+    const payload = await verifyGoogle(body.idToken)
+
+    const userSchema = z.object({
+      sub: z.string(),
+      email: z.string(),
+      name: z.string(),
+      picture: z.string().url(),
+    })
+
+    const userInfo = userSchema.parse(payload)
+
+    let user = await prisma.user.findUnique({
+      where: {
+        providerId: userInfo.sub,
+      },
+    })
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          providerId: userInfo.sub,
+          login: userInfo.email,
+          name: userInfo.name,
+          avatarUrl: userInfo.picture,
+          shoppingLists: {
+            create: {
+              name: 'Lista de Compras',
+            },
+          },
+        },
+      })
+    }
+
+    const token = app.jwt.sign(
+      {
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+      },
+      {
+        sub: user.id,
+        expiresIn: '7 days',
+      },
+    )
+
+    return { token }
   })
 }

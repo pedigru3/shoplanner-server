@@ -13,7 +13,7 @@ datasource db {
 model User {
   id         String @id @default(uuid())
   login      String @unique
-  providerId Int    @unique
+  providerId String @unique
   name       String
   avatarUrl  String
 
