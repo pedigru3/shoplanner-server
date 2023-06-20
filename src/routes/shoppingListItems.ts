@@ -5,7 +5,6 @@ import { getOrCreateItem } from '../repository/getOrCreateItem'
 import { findShoppingListItem } from '../repository/findShoppingListItem'
 import { createShoppingListItem } from '../repository/createShoppingListItem'
 import { prisma } from '../lib/prisma'
-import { select } from '../consts/selectedShoppingListItem'
 
 export async function shoppingListsItemsRoutes(app: FastifyInstance) {
   app.addHook('preHandler', async (request) => {
@@ -80,8 +79,6 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
       })
 
       if (shoppingListItem.item.userId !== req.user.sub) {
-        console.log(shoppingListItem.item.userId)
-        console.log(req.user.sub)
         return reply.status(401).send({ error: 'Unauthorized id' })
       }
 
@@ -138,18 +135,73 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
           data: {
             itemId: newItem.id,
           },
-          select,
+          select: {
+            id: true,
+            createdAt: true,
+            quantity: true,
+            currentPrice: {
+              select: {
+                id: true,
+                value: true,
+                createdAt: true,
+              },
+            },
+            item: {
+              select: {
+                id: true,
+                name: true,
+                category: true,
+                prices: {
+                  select: {
+                    id: true,
+                    createdAt: true,
+                    value: true,
+                  },
+                },
+              },
+            },
+          },
         })
         return response
       }
       // update price
       if (price) {
-        const response = await prisma.price.update({
+        const response = await prisma.shoppingListItem.update({
           where: {
-            id: shoppingListItem.priceId,
+            id: shoppingListItem.id,
           },
           data: {
-            value: price,
+            currentPrice: {
+              update: {
+                value: price,
+              },
+            },
+          },
+          select: {
+            id: true,
+            createdAt: true,
+            quantity: true,
+            currentPrice: {
+              select: {
+                id: true,
+                value: true,
+                createdAt: true,
+              },
+            },
+            item: {
+              select: {
+                id: true,
+                name: true,
+                category: true,
+                prices: {
+                  select: {
+                    id: true,
+                    createdAt: true,
+                    value: true,
+                  },
+                },
+              },
+            },
           },
         })
         return response
@@ -162,6 +214,32 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
           },
           data: {
             quantity,
+          },
+          select: {
+            id: true,
+            createdAt: true,
+            quantity: true,
+            currentPrice: {
+              select: {
+                id: true,
+                value: true,
+                createdAt: true,
+              },
+            },
+            item: {
+              select: {
+                id: true,
+                name: true,
+                category: true,
+                prices: {
+                  select: {
+                    id: true,
+                    createdAt: true,
+                    value: true,
+                  },
+                },
+              },
+            },
           },
         })
         return response
