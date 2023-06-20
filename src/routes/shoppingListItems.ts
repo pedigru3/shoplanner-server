@@ -148,6 +148,7 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
             },
             item: {
               select: {
+                createdAt: true,
                 id: true,
                 name: true,
                 category: true,
@@ -190,6 +191,7 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
             },
             item: {
               select: {
+                createdAt: true,
                 id: true,
                 name: true,
                 category: true,
@@ -228,6 +230,7 @@ export async function shoppingListsItemsRoutes(app: FastifyInstance) {
             },
             item: {
               select: {
+                createdAt: true,
                 id: true,
                 name: true,
                 category: true,
