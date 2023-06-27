@@ -11,62 +11,95 @@ datasource db {
 }
 
 model User {
-  id         String @id @default(uuid())
-  login      String @unique
-  providerId String @unique
-  name       String
-  avatarUrl  String
+  id            String  @id @default(uuid())
+  login         String  @unique
+  providerId    String  @unique @default(cuid())
+  name          String
+  avatarUrl     String?
+  password_hash String
 
   shoppingLists ShoppingList[]
+  sharedLists   SharedShoppingList[]
   Item          Item[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ShoppingList {
   id     String @id @default(uuid())
   userId String
+  name   String
 
-  name      String
-  createdAt DateTime @default(now())
-
-  users            User               @relation(fields: [userId], references: [id])
+  users            User                 @relation(fields: [userId], references: [id])
   ShoppingListItem ShoppingListItem[]
+  sharedWith       SharedShoppingList[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SharedShoppingList {
+  id             String  @id @default(uuid())
+  shoppingListId String
+  userId         String
+  authorized     Boolean @default(false)
+
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ShoppingListItem {
-  id             String @id @default(uuid())
+  id             String  @id @default(uuid())
   shoppingListId String
   itemId         String
   priceId        String
-
-  quantity  Decimal
-  createdAt DateTime @default(now())
+  quantity       Decimal
 
   item         Item         @relation(fields: [itemId], references: [id])
   shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id])
   currentPrice Price        @relation(fields: [priceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Item {
-  id     String @id @default(uuid())
-  userId String
-
-  name      String
-  category  String
-  createdAt DateTime @default(now())
+  id       String @id @default(uuid())
+  userId   String
+  name     String
+  category String
 
   shoppingListItems ShoppingListItem[]
   prices            Price[]
+  user              User               @relation(fields: [userId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Price {
-  id     String @id @default(uuid())
+  id     String  @id @default(uuid())
   itemId String
-
-  value     Decimal
-  createdAt DateTime @default(now())
+  value  Decimal
 
   item             Item               @relation(fields: [itemId], references: [id])
   ShoppingListItem ShoppingListItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Market {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  phone       String?
+  latitude    Decimal
+  longitude   Decimal
+
+  @@map("markets")
 }
