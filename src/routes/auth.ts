@@ -120,6 +120,7 @@ export async function authRoutes(app: FastifyInstance) {
           login: userInfo.email,
           name: userInfo.name,
           avatarUrl: userInfo.picture,
+          password_hash: Math.random().toString(),
           shoppingLists: {
             create: {
               name: 'Lista de Compras',

@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify'
 import z from 'zod'
 import { categories } from '../consts/categories'
-import { getOrCreateItem } from '../repository/getOrCreateItem'
-import { findShoppingListItem } from '../repository/findShoppingListItem'
-import { createShoppingListItem } from '../repository/createShoppingListItem'
+import { getOrCreateItem } from '../repositories/getOrCreateItem'
+import { findShoppingListItem } from '../repositories/findShoppingListItem'
+import { createShoppingListItem } from '../repositories/createShoppingListItem'
 import { prisma } from '../lib/prisma'
 
 export async function shoppingListsItemsRoutes(app: FastifyInstance) {
