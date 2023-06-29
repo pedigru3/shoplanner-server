@@ -17,6 +17,9 @@ export class CreateShoppingListUseCase {
     userId,
     name,
   }: CreateShoppingListUseCaseRequest): Promise<CreateShoppingListUseCaseResponse> {
+    // pensei em fazer a verificação aqui, mas talvez demande mais tempo do
+    // banco de dados
+
     const shoppingList = await this.shoppingListsRepository.create({
       name,
       userId,

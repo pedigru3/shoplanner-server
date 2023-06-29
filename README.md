@@ -4,13 +4,18 @@ Shoplanner Server
 
 - [x] Deve ser possível se cadastrar
 - [x] Deve ser possível se autenticar
-- [ ] Deve ser possível obter o perfil de um usuário
-- [ ] Deve ser possível criar uma lista de compras
+- [x] Deve ser possível obter o perfil de um usuário
+- [x] Deve ser possível criar uma lista de compras
+- [ ] Deve ser possível compartilhar uma lista com outro usuário
+- [ ] Deve ser possível criar um item da lista de compras
 
 ## RNs (Regras de negócio)
 
 - [x] O usuário não deve poder se cadastrar com um e-mail duplicado
+- [ ] O usuário deve autorizar receber uma lista de compras compartilhada
 - [ ] Ao criar um usuário, deve-se criar também uma lista de compras automaticamente
+- [ ] Cada item da lista de compras deve ser único para cada usuário
+- [ ] O usuário não deve ter dois itens de mesmo nome na mesma lista
 
 ## RNFs (Requisitos não-funcionais)
 
