@@ -28,13 +28,15 @@ export class CreateShoppingListItemUseCase {
 
   async execute({
     userId,
-    name,
+    name: nameNotTransformed,
     category,
     price: value,
     quantity,
     shoppingListId,
     createdAt,
   }: CreateShoppingListItemUseCaseRequest): Promise<CreateShoppingListItemUseCaseResponse> {
+    const name = nameNotTransformed.toLowerCase().trimEnd()
+
     const doesItemAlreadyExists = await this.itemsRepository.findByName(name)
 
     let item: Item

@@ -52,7 +52,7 @@ describe('Create Shopping List Item Use Case', () => {
     await expect(() =>
       sut.execute({
         category: Category.Alimentos,
-        name: 'Arroz',
+        name: 'arroz ',
         price: 20.0,
         quantity: 2,
         shoppingListId: 'shoppingListId-fake',
@@ -81,5 +81,32 @@ describe('Create Shopping List Item Use Case', () => {
     })
 
     expect(item1.shoppingListItem.itemId).toBe(item2.shoppingListItem.itemId)
+  })
+
+  it('should be show the price evolution', async () => {
+    const item1 = await sut.execute({
+      category: Category.Alimentos,
+      name: 'Arroz',
+      price: 18.0,
+      quantity: 2,
+      shoppingListId: 'shoppingListId',
+      userId: 'userId-fake',
+    })
+
+    await sut.execute({
+      category: Category.Alimentos,
+      name: 'Arroz',
+      price: 20.0,
+      quantity: 2,
+      shoppingListId: 'other-list-id',
+      userId: 'userId-fake',
+    })
+
+    const prices = await priceRepository.findManyByItemId(
+      item1.shoppingListItem.itemId,
+    )
+
+    expect(prices[0].value.toNumber()).toEqual(18)
+    expect(prices[1].value.toNumber()).toEqual(20)
   })
 })

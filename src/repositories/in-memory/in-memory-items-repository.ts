@@ -1,9 +1,25 @@
 import { Item, Prisma } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { ItemsRepository } from '../items-repository'
+import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 
 export class InMemorytItemsRepository implements ItemsRepository {
   public items: Item[] = []
+
+  async update(data: Prisma.ItemUpdateInput): Promise<Item> {
+    const index = this.items.findIndex((item) => item.id === data.id)
+    if (index > -1) {
+      const item: Item = {
+        ...this.items[index],
+        category: data.category?.toString() ?? this.items[index].category,
+      }
+
+      this.items[index] = item
+      return item
+    } else {
+      throw new ResourceNotFoundError()
+    }
+  }
 
   async findByName(name: string): Promise<Item | null> {
     const foundItem = this.items.find((item) => item.name === name)

@@ -1,6 +1,7 @@
 import { Prisma, Price } from '.prisma/client'
 
 export interface PricesRepository {
-  // findByName(name: string): Promise<ShoppingList | null>
+  update(data: Prisma.PriceUncheckedUpdateInput): Promise<Price>
+  findManyByItemId(itemId: string): Promise<Price[]>
   create(data: Prisma.PriceUncheckedCreateInput): Promise<Price>
 }
