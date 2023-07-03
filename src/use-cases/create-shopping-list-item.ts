@@ -37,7 +37,8 @@ export class CreateShoppingListItemUseCase {
   }: CreateShoppingListItemUseCaseRequest): Promise<CreateShoppingListItemUseCaseResponse> {
     const name = nameNotTransformed.toLowerCase().trimEnd()
 
-    const doesItemAlreadyExists = await this.itemsRepository.findByName(name)
+    const doesItemAlreadyExists =
+      await this.itemsRepository.findByNameAndUserId(name, userId)
 
     let item: Item
 
@@ -63,12 +64,16 @@ export class CreateShoppingListItemUseCase {
       value,
     })
 
+    // create forecast
+    // buscar todos os items
+
     const shoppingListItem = await this.shoppingListItemsRepository.create({
       itemId: item.id,
       priceId: price.id,
       quantity,
       shoppingListId,
       createdAt,
+      forecast: 10,
     })
 
     return {

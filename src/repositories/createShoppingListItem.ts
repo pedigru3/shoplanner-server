@@ -5,6 +5,7 @@ interface ShoppingListItemParams {
   itemId: string
   quantity: number
   shoppingListId: string
+  forecast: number
 }
 
 export async function createShoppingListItem({
@@ -12,6 +13,7 @@ export async function createShoppingListItem({
   itemId,
   quantity,
   shoppingListId,
+  forecast,
 }: ShoppingListItemParams) {
   // to create the list is necessary create a price
   const result = await prisma.$transaction(async (prisma) => {
@@ -28,6 +30,7 @@ export async function createShoppingListItem({
         itemId,
         quantity,
         shoppingListId,
+        forecast,
       },
       select: {
         createdAt: true,

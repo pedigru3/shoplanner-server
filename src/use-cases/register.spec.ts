@@ -3,14 +3,18 @@ import { RegisterUseCase } from './register'
 import { compare } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UserAlreadyExistsError } from './errors/user-already-exists'
+import { ShoppingListsRepository } from '@/repositories/shopping-lists-repository'
+import { InMemoryShoppingListsRepository } from '@/repositories/in-memory/in-memory-shopping-lists-repository'
 
 let usersRepository: InMemoryUsersRepository
+let shoppingListRepository: ShoppingListsRepository
 let sut: RegisterUseCase
 
 describe('Register Use Case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
-    sut = new RegisterUseCase(usersRepository)
+    shoppingListRepository = new InMemoryShoppingListsRepository()
+    sut = new RegisterUseCase(usersRepository, shoppingListRepository)
   })
 
   it('shold be able to register', async () => {
@@ -54,5 +58,19 @@ describe('Register Use Case', () => {
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(UserAlreadyExistsError)
+  })
+
+  it('shold not be create a list with register', async () => {
+    const email = 'jonhdoe@exemple.com'
+
+    const user = await sut.execute({
+      name: 'Jonh Doe',
+      email,
+      password: '123456',
+    })
+
+    const shoppingLists = await shoppingListRepository.findMany(user.id)
+
+    expect(shoppingLists[0].name).toEqual('Nome do Supermercado')
   })
 })

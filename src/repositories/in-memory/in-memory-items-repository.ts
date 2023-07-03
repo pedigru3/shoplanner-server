@@ -6,6 +6,11 @@ import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-err
 export class InMemorytItemsRepository implements ItemsRepository {
   public items: Item[] = []
 
+  async searchManyByName(name: string): Promise<Item[]> {
+    const items = this.items.filter((item) => item.name.includes(name))
+    return items
+  }
+
   async update(data: Prisma.ItemUpdateInput): Promise<Item> {
     const index = this.items.findIndex((item) => item.id === data.id)
     if (index > -1) {
@@ -21,8 +26,13 @@ export class InMemorytItemsRepository implements ItemsRepository {
     }
   }
 
-  async findByName(name: string): Promise<Item | null> {
-    const foundItem = this.items.find((item) => item.name === name)
+  async findByNameAndUserId(
+    name: string,
+    userId: string,
+  ): Promise<Item | null> {
+    const foundItem = this.items.find(
+      (item) => item.name === name && item.userId === userId,
+    )
     return foundItem || null
   }
 

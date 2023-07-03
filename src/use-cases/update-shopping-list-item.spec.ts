@@ -43,6 +43,7 @@ describe('Create Shopping List Item Use Case', () => {
       priceId: 'price-id',
       quantity: 2,
       shoppingListId: 'shopping-list-id',
+      forecast: 10,
     })
   })
 
@@ -56,7 +57,7 @@ describe('Create Shopping List Item Use Case', () => {
       },
     })
 
-    const item = await itemsRepository.findByName('Macarrão')
+    const item = await itemsRepository.findByNameAndUserId('Macarrão', 'user-1')
 
     expect(shoppingListItem.itemId).not.toBe('arroz-item')
     expect(item?.name).toEqual('Macarrão')
@@ -72,7 +73,7 @@ describe('Create Shopping List Item Use Case', () => {
       },
     })
 
-    const item = await itemsRepository.findByName('Arroz')
+    const item = await itemsRepository.findByNameAndUserId('Arroz', 'user-1')
 
     expect(shoppingListItem.itemId).toBe('arroz-item')
     expect(item?.category).toEqual('Carnes')

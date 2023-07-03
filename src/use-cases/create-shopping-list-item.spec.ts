@@ -39,6 +39,28 @@ describe('Create Shopping List Item Use Case', () => {
     expect(shoppingListItem.id).toEqual(expect.any(String))
   })
 
+  it('should be able a user create a different shopping list item', async () => {
+    const { shoppingListItem: shop1 } = await sut.execute({
+      category: Category.Alimentos,
+      name: 'Arroz',
+      price: 20.0,
+      quantity: 2,
+      shoppingListId: 'shoppingListId-fake',
+      userId: 'userId-fake',
+    })
+
+    const { shoppingListItem: shop2 } = await sut.execute({
+      category: Category.Alimentos,
+      name: 'Arroz',
+      price: 20.0,
+      quantity: 2,
+      shoppingListId: 'shoppingListId-fake2',
+      userId: 'userId-2',
+    })
+
+    expect(shop1.itemId).not.toEqual(shop2.itemId)
+  })
+
   it('should not be able to create a shopping list item with same name', async () => {
     await sut.execute({
       category: Category.Alimentos,

@@ -48,7 +48,7 @@ export class UpdateShoppingListItemUseCase {
     if (itemRequest) {
       const name = itemRequest.name.trim()
       const doesItemAlreadyExists = name
-        ? await this.itemsRepository.findByName(name)
+        ? await this.itemsRepository.findByNameAndUserId(name, userId)
         : null
 
       if (doesItemAlreadyExists) {
@@ -91,10 +91,17 @@ export class UpdateShoppingListItemUseCase {
     }
 
     if (value) {
-      await this.pricesRepository.update({
-        id: shoppingListItem.priceId,
-        value,
-      })
+      if (shoppingListItem.priceId) {
+        await this.pricesRepository.update({
+          id: shoppingListItem.priceId,
+          value,
+        })
+      } else {
+        await this.pricesRepository.create({
+          value,
+          itemId: shoppingListItem.id,
+        })
+      }
     }
 
     if (quantity) {

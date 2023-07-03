@@ -46,9 +46,10 @@ export class InMemoryShoppingListItemsRepository
       createdAt: new Date(),
       updatedAt: new Date(),
       itemId: data.itemId,
-      priceId: data.priceId,
+      priceId: data.priceId ?? null,
       quantity: new Prisma.Decimal(data.quantity.toString()),
       shoppingListId: data.shoppingListId,
+      forecast: new Prisma.Decimal(data.forecast.toString()),
     }
 
     this.items.push(shoppingListItem)

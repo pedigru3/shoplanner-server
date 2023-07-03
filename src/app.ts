@@ -16,7 +16,7 @@ app.register(cors, {
 })
 
 app.register(jwt, {
-  secret: process.env.JWT_PASS ?? 'default@dpldz.cakpregister',
+  secret: env.JWT_PASS,
 })
 
 app.register(appRoutes)

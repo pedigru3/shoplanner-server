@@ -3,10 +3,11 @@ import { z } from 'zod'
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'),
+  JWT_PASS: z.string(),
   PORT: z.coerce.number().default(3333),
 })
 
-const _env = envSchema.safeParse(envSchema)
+const _env = envSchema.safeParse(process.env)
 
 if (_env.success === false) {
   console.error('❌ Invaled environment variables', _env.error.format())

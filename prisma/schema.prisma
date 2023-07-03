@@ -30,12 +30,14 @@ model ShoppingList {
   userId String
   name   String
 
-  users            User                 @relation(fields: [userId], references: [id])
-  ShoppingListItem ShoppingListItem[]
-  sharedWith       SharedShoppingList[]
+  market            Market?              @relation(fields: [marketId], references: [id])
+  users             User                 @relation(fields: [userId], references: [id])
+  shoppingListItems ShoppingListItem[]
+  sharedWith        SharedShoppingList[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  marketId  String?
 }
 
 model SharedShoppingList {
@@ -55,12 +57,13 @@ model ShoppingListItem {
   id             String  @id @default(uuid())
   shoppingListId String
   itemId         String
-  priceId        String
+  priceId        String?
   quantity       Decimal
+  forecast       Decimal
 
   item         Item         @relation(fields: [itemId], references: [id])
   shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id])
-  currentPrice Price        @relation(fields: [priceId], references: [id])
+  currentPrice Price?       @relation(fields: [priceId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -93,12 +96,13 @@ model Price {
 }
 
 model Market {
-  id          String  @id @default(uuid())
-  title       String
-  description String?
-  phone       String?
-  latitude    Decimal
-  longitude   Decimal
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  phone        String?
+  latitude     Decimal
+  longitude    Decimal
+  ShoppingList ShoppingList[]
 
   @@map("markets")
 }

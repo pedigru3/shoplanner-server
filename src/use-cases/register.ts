@@ -1,6 +1,7 @@
 import { UsersRepository } from '@/repositories/users-repository'
 import { hash } from 'bcryptjs'
 import { UserAlreadyExistsError } from './errors/user-already-exists'
+import { ShoppingListsRepository } from '@/repositories/shopping-lists-repository'
 
 interface RegisterUseCaseRequest {
   name: string
@@ -9,11 +10,10 @@ interface RegisterUseCaseRequest {
 }
 
 export class RegisterUseCase {
-  private usersRepository: UsersRepository
-
-  constructor(usersRepository: any) {
-    this.usersRepository = usersRepository
-  }
+  constructor(
+    private usersRepository: UsersRepository,
+    private shoppingListRepository: ShoppingListsRepository,
+  ) {}
 
   async execute({ name, email, password }: RegisterUseCaseRequest) {
     const password_hash = await hash(password, 6)
@@ -28,6 +28,11 @@ export class RegisterUseCase {
       name,
       email,
       password_hash,
+    })
+
+    await this.shoppingListRepository.create({
+      name: 'Nome do Supermercado',
+      userId: user.id,
     })
 
     return user

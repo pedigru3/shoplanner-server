@@ -8,6 +8,11 @@ export class InMemoryShoppingListsRepository
 {
   public items: ShoppingList[] = []
 
+  async findById(id: string): Promise<ShoppingList | null> {
+    const item = this.items.find((item) => item.id === id)
+    return item || null
+  }
+
   async findMany(userId: string): Promise<ShoppingList[]> {
     const shoppingLists = this.items.filter((item) => item.userId === userId)
     return shoppingLists
@@ -34,7 +39,8 @@ export class InMemoryShoppingListsRepository
       name: data.name,
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: '10',
+      userId: data.userId,
+      marketId: data.marketId ?? null,
     }
 
     this.items.push(shoppingList)
