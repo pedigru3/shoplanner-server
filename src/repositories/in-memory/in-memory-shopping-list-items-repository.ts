@@ -8,6 +8,15 @@ export class InMemoryShoppingListItemsRepository
 {
   public items: ShoppingListItem[] = []
 
+  async findManyByShoppingListId(
+    shoppingListId: string,
+  ): Promise<ShoppingListItem[]> {
+    const items = this.items.filter(
+      (item) => item.shoppingListId === shoppingListId,
+    )
+    return items
+  }
+
   async findById(id: string): Promise<ShoppingListItem | null> {
     const shoppingListItem = this.items.find((item) => item.id === id)
     return shoppingListItem || null

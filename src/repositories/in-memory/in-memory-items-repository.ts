@@ -6,6 +6,17 @@ import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-err
 export class InMemorytItemsRepository implements ItemsRepository {
   public items: Item[] = []
 
+  async findById(id: string): Promise<Item | null> {
+    return this.items.find((item) => item.id === id) ?? null
+  }
+
+  async findManyByGlobalId(globalItemId: string): Promise<Item[]> {
+    const items = this.items.filter(
+      (item) => item.globalItemId === globalItemId,
+    )
+    return items
+  }
+
   async searchManyByName(name: string): Promise<Item[]> {
     const items = this.items.filter((item) => item.name.includes(name))
     return items
@@ -37,11 +48,12 @@ export class InMemorytItemsRepository implements ItemsRepository {
   }
 
   async create(data: Prisma.ItemUncheckedCreateInput): Promise<Item> {
-    const { category, name, userId, createdAt } = data
+    const { category, name, userId, globalItemId, createdAt } = data
     const item: Item = {
       id: data.id ?? randomUUID(),
       createdAt: createdAt ? new Date(createdAt) : new Date(),
       updatedAt: new Date(),
+      globalItemId,
       category,
       name,
       userId,

@@ -8,6 +8,15 @@ export class InMemoryShoppingListsRepository
 {
   public items: ShoppingList[] = []
 
+  async delete(id: string): Promise<Boolean> {
+    const index = this.items.findIndex((item) => item.id === id)
+    if (index > -1) {
+      this.items.slice(index, 1)
+      return true
+    }
+    return false
+  }
+
   async findById(id: string): Promise<ShoppingList | null> {
     const item = this.items.find((item) => item.id === id)
     return item || null

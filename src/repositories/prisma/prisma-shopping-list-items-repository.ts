@@ -6,6 +6,16 @@ import { ShoppingListItemUpdateInput } from '../types/prisma-types'
 export class PrismaShoppingListItemsRepository
   implements ShoppingListItemsRepository
 {
+  async findManyByShoppingListId(
+    shoppingListId: string,
+  ): Promise<ShoppingListItem[]> {
+    return await prisma.shoppingListItem.findMany({
+      where: {
+        shoppingListId,
+      },
+    })
+  }
+
   async update(data: ShoppingListItemUpdateInput): Promise<ShoppingListItem> {
     const { id, quantity, itemId, priceId } = data
     const shoppingListItem = await prisma.shoppingListItem.update({
@@ -15,8 +25,13 @@ export class PrismaShoppingListItemsRepository
     return shoppingListItem
   }
 
-  findById(id: string): Promise<ShoppingListItem | null> {
-    throw new Error('Method not implemented.')
+  async findById(id: string): Promise<ShoppingListItem | null> {
+    const shoppingListItem = prisma.shoppingListItem.findUnique({
+      where: {
+        id,
+      },
+    })
+    return shoppingListItem
   }
 
   async findByItemId(itemId: string): Promise<ShoppingListItem | null> {

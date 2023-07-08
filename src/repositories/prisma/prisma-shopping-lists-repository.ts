@@ -3,6 +3,15 @@ import { ShoppingListsRepository } from '../shopping-lists-repository'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaShoppingListsRepository implements ShoppingListsRepository {
+  async delete(id: string): Promise<Boolean> {
+    await prisma.shoppingList.delete({
+      where: {
+        id,
+      },
+    })
+    return true
+  }
+
   async findById(id: string): Promise<ShoppingList | null> {
     const shoppingList = await prisma.shoppingList.findUnique({
       where: {
@@ -37,15 +46,9 @@ export class PrismaShoppingListsRepository implements ShoppingListsRepository {
   async create(
     data: Prisma.ShoppingListUncheckedCreateInput,
   ): Promise<ShoppingList> {
-    const { name, userId } = data
-
     const shoppingList = prisma.shoppingList.create({
-      data: {
-        name,
-        userId,
-      },
+      data,
     })
-
     return shoppingList
   }
 }

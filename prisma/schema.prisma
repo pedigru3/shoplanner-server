@@ -78,9 +78,18 @@ model Item {
   shoppingListItems ShoppingListItem[]
   prices            Price[]
   user              User               @relation(fields: [userId], references: [id])
+  globalItem        GlobalItem         @relation(fields: [globalItemId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  globalItemId String
+}
+
+model GlobalItem {
+  id   String @id @default(uuid())
+  name String
+
+  Item Item[]
 }
 
 model Price {
