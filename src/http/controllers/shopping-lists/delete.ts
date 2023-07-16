@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { makeDeleteShoppingListUseCase } from '@/use-cases/factories/make-delete-shopping-list-use-cases'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 import { UnauthorizedError } from '@/use-cases/errors/unauthorized-error'
+import { makeDeleteShoppingListUseCase } from '@/use-cases/factories/shopping-lists/make-delete-shopping-list-use-cases'
 
 export async function deleteShoppingListController(
   req: FastifyRequest,

@@ -3,6 +3,15 @@ import { PricesRepository } from '../price-repository'
 import { prisma } from '@/lib/prisma'
 
 export class PrismaPricesRepository implements PricesRepository {
+  async delete(id: string): Promise<boolean> {
+    await prisma.price.delete({
+      where: {
+        id,
+      },
+    })
+    return true
+  }
+
   async update(data: Prisma.PriceUncheckedUpdateInput): Promise<Price> {
     return await prisma.price.update({
       where: {

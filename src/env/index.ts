@@ -6,6 +6,7 @@ const envSchema = z.object({
   JWT_PASS: z.string(),
   PORT: z.coerce.number().default(3333),
   DATABASE_URL: z.string(),
+  OPEN_AI_KEY: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

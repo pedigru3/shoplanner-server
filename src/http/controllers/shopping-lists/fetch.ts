@@ -1,5 +1,5 @@
+import { makeFetchShoppingListsUseCase } from '@/use-cases/factories/shopping-lists/make-fetch-shopping-lists-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { makeFetchShoppingListsUseCase } from '@/use-cases/factories/make-fetch-shopping-lists-use-case copy'
 
 export async function fetchShoppingListsController(
   request: FastifyRequest,

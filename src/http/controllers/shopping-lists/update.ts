@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { makeUpdateShoppingListUseCase } from '@/use-cases/factories/make-update-shopping-list-use-cases'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 import { UnauthorizedError } from '@/use-cases/errors/unauthorized-error'
+import { makeUpdateShoppingListUseCase } from '@/use-cases/factories/shopping-lists/make-update-shopping-list-use-cases'
 
 export async function updateShoppingListController(
   req: FastifyRequest,

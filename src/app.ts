@@ -43,7 +43,7 @@ app.addHook('preHandler', (request, reply, done) => {
 
   if (isSwaggerRequest) {
     // A requisição está vindo do Swagger
-    console.log('Requisição do Swagger')
+    console.log('Requisição do Swagger - trocar para dev')
   }
 
   done()

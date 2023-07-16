@@ -52,6 +52,7 @@
     "fastify": "^4.17.0",
     "google-auth-library": "^8.8.0",
     "ml-regression": "^5.0.0",
+    "openai": "^3.3.0",
     "tsup": "^6.7.0",
     "zod": "^3.21.4"
   }

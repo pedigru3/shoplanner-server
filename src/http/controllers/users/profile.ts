@@ -1,4 +1,4 @@
-import { makeUserProfileUseCase } from '@/use-cases/factories/make-user-profile-use-cases'
+import { makeUserProfileUseCase } from '@/use-cases/factories/users/make-user-profile-use-cases'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function profile(request: FastifyRequest, reply: FastifyReply) {
@@ -12,6 +12,7 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
     user: {
       ...user,
       password_hash: undefined,
+      updatedAt: undefined,
     },
   })
 }

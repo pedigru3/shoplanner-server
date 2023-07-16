@@ -6,6 +6,15 @@ import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-err
 export class InMemorytPricesRepository implements PricesRepository {
   public items: Price[] = []
 
+  async delete(id: string): Promise<boolean> {
+    const index = this.items.findIndex((item) => item.id === id)
+    if (index > -1) {
+      this.items.slice(index, 1)
+      return true
+    }
+    return false
+  }
+
   async findById(id: string): Promise<Price | null> {
     return this.items.find((item) => item.id === id) ?? null
   }

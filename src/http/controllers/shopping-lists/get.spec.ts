@@ -28,6 +28,7 @@ describe('Get a Shopping List (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
 
     expect(response.statusCode).toEqual(200)
+
     expect(response.body).toEqual(
       expect.objectContaining({
         name: 'Big',

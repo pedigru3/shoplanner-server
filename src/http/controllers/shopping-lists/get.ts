@@ -1,5 +1,5 @@
+import { makeGetShoppingListUseCase } from '@/use-cases/factories/shopping-lists/make-get-shopping-list-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { makeGetShoppingListUseCase } from '@/use-cases/factories/make-get-shopping-list-use-case'
 import { z } from 'zod'
 
 export async function getShoppingListController(
@@ -14,10 +14,12 @@ export async function getShoppingListController(
 
   const { id } = paramScheme.parse(request.params)
 
-  const shoppingLists = await getShoppingListUseCase.execute({
+  const shoppingList = await getShoppingListUseCase.execute({
     shoppingListId: id,
     userId: request.user.sub,
   })
 
-  return reply.code(200).send(shoppingLists)
+  console.log(shoppingList)
+
+  return reply.code(200).send(shoppingList)
 }

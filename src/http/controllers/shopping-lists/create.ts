@@ -1,6 +1,6 @@
+import { makeCreateShoppingListUseCase } from '@/use-cases/factories/shopping-lists/make-create-shopping-list-use-cases'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { makeCreateShoppingListUseCase } from '@/use-cases/factories/make-create-shopping-list-use-cases'
 
 export async function createShoppingListController(
   request: FastifyRequest,
